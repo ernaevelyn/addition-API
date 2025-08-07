@@ -26,5 +26,20 @@ namespace Addition_API.Controllers
 
             return Ok(model);
         }
+
+        [HttpGet("Totals")]
+        public IActionResult GetTotals([FromQuery] int? minTotal)
+        {
+            var totalsQuery = _context.Toplamalar.AsQueryable();
+
+            if (minTotal.HasValue)
+            {
+                totalsQuery = totalsQuery.Where(x => x.Total > minTotal.Value);
+            }
+
+            var totals = totalsQuery.Select(x => x.Total).ToList();
+
+            return Ok(totals);
+        }
     }
 }
