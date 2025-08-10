@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Addition_API.Data;
 using Addition_API.Models;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Linq;
 
 namespace Addition_API.Controllers
 {
@@ -17,6 +19,7 @@ namespace Addition_API.Controllers
         }
 
         [HttpPost("Add")]
+        [EnableRateLimiting("fixed")]
         public IActionResult AddNumbers([FromBody] Addition model)
         {
             model.Total = model.First + model.Last;
@@ -28,6 +31,7 @@ namespace Addition_API.Controllers
         }
 
         [HttpGet("Totals")]
+        [EnableRateLimiting("fixed")]
         public IActionResult GetTotals([FromQuery] int? minTotal)
         {
             var totalsQuery = _context.Toplamalar.AsQueryable();
@@ -41,5 +45,6 @@ namespace Addition_API.Controllers
 
             return Ok(totals);
         }
+
     }
 }
